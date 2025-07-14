@@ -18,6 +18,10 @@
   animation: bounce 0.4s ease;
 }
 
+#mobileMenu {
+  transition: transform 0.3s ease-in-out;
+}
+
 .btn-primary {
   background-color: #7ee8c1;
   color: #2e2e2e;

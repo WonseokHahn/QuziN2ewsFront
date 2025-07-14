@@ -11,6 +11,12 @@ const apiBase = "https://quizn2ews.onrender.com/api";
       document.getElementById("loading").classList.toggle("hidden", !show);
     }
 
+    // 햄버거 메뉴
+    function toggleMenu() {
+      const menu = document.getElementById("mobileMenu");
+      menu.classList.toggle("translate-x-full");
+    }
+
     // 퀴즈생성 함수
     async function generateQuiz() {
       const topic = document.getElementById("topicInput").value || "상식";

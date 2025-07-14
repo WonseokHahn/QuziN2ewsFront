@@ -10,13 +10,32 @@
 </head>
 <body class="bg-[#2e2e2e] text-[#d6d6d6] min-h-screen font-sans">
   
-  <header class="bg-[#383838] text-[#d6d6d6] px-6 py-4 flex flex-col md:flex-row justify-between items-start md:items-center shadow-md">
+  <header class="bg-[#383838] text-[#d6d6d6] px-6 py-4 flex justify-between items-center shadow-md relative z-20">
     <h1 class="text-2xl font-extrabold cursor-pointer select-none hover:text-[#7ee8c1] transition" onclick="showSection('quiz')">QuizN2ews</h1>
-    <nav class="flex gap-3 mt-3 md:mt-0">
-      <button onclick="showSection('quiz')" class="bg-[#7ee8c1] hover:bg-[#5ccaa6] px-4 py-2 rounded text-[#2e2e2e] font-semibold transition shadow-sm">틈새 지식 퀴즈</button>
-      <button onclick="showSection('news')" class="bg-[#4a4a4a] hover:bg-[#606060] px-4 py-2 rounded text-[#d6d6d6] font-semibold transition shadow-sm">요약 뉴스 피드</button>
-    </nav>
+    <!-- 햄버거 버튼: 모든 해상도에서 표시 -->
+    <button onclick="toggleMenu()" class="focus:outline-none">
+      <svg class="w-8 h-8 text-[#7ee8c1]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
   </header>
+  
+  <!-- 슬라이드 메뉴 (모든 해상도에서 공통 사용) -->
+  <div id="mobileMenu" class="fixed top-0 right-0 h-full w-64 bg-[#3a3a3a] text-[#d6d6d6] shadow-lg transform translate-x-full transition-transform duration-300 z-40">
+    <div class="flex justify-between items-center px-6 py-4 border-b border-[#555]">
+      <span class="text-lg font-bold">메뉴</span>
+      <button onclick="toggleMenu()">
+        <svg class="w-6 h-6 text-[#7ee8c1]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    <div class="flex flex-col p-4 space-y-3">
+      <button onclick="showSection('quiz'); toggleMenu();" class="w-full text-left px-4 py-2 rounded bg-[#7ee8c1] text-[#2e2e2e] font-semibold hover:bg-[#5ccaa6]">틈새 지식 퀴즈</button>
+      <button onclick="showSection('news'); toggleMenu();" class="w-full text-left px-4 py-2 rounded bg-[#7ee8c1] text-[#2e2e2e] font-semibold hover:bg-[#5ccaa6]">요약 뉴스 피드</button>
+    </div>
+  </div>
+
 
   <main class="max-w-4xl mx-auto p-6">
     <div id="loading" class="hidden fixed inset-0 flex items-center justify-center bg-black/70 z-50">
