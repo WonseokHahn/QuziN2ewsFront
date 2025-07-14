@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -10,60 +9,103 @@
 </head>
 <body class="bg-[#2e2e2e] text-[#d6d6d6] min-h-screen font-sans">
   
+  <!-- Header -->
   <header class="bg-[#383838] text-[#d6d6d6] px-6 py-4 flex justify-between items-center shadow-md relative z-20">
-    <h1 class="text-2xl font-extrabold cursor-pointer select-none hover:text-[#7ee8c1] transition" onclick="showSection('quiz')">QuizN2ews</h1>
-    <!-- 햄버거 버튼: 모든 해상도에서 표시 -->
-    <button onclick="toggleMenu()" class="focus:outline-none">
+    <h1 id="logo" class="text-2xl font-extrabold cursor-pointer select-none hover:text-[#7ee8c1] transition">
+      QuizN2ews
+    </h1>
+    <!-- 햄버거 버튼 -->
+    <button id="hamburgerBtn" class="focus:outline-none">
       <svg class="w-8 h-8 text-[#7ee8c1]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
       </svg>
     </button>
   </header>
   
-  <!-- 슬라이드 메뉴 (모든 해상도에서 공통 사용) -->
+  <!-- 슬라이드 메뉴 -->
   <div id="mobileMenu" class="fixed top-0 right-0 h-full w-64 bg-[#3a3a3a] text-[#d6d6d6] shadow-lg transform translate-x-full transition-transform duration-300 z-40">
     <div class="flex justify-between items-center px-6 py-4 border-b border-[#555]">
       <span class="text-lg font-bold">메뉴</span>
-      <button onclick="toggleMenu()">
+      <button id="menuCloseBtn">
         <svg class="w-6 h-6 text-[#7ee8c1]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
         </svg>
       </button>
     </div>
     <div class="flex flex-col p-4 space-y-3">
-      <button onclick="showSection('quiz'); toggleMenu();" class="w-full text-left px-4 py-2 rounded bg-[#7ee8c1] text-[#2e2e2e] font-semibold hover:bg-[#5ccaa6]">틈새 지식 퀴즈</button>
-      <button onclick="showSection('news'); toggleMenu();" class="w-full text-left px-4 py-2 rounded bg-[#7ee8c1] text-[#2e2e2e] font-semibold hover:bg-[#5ccaa6]">요약 뉴스 피드</button>
+      <button id="menuQuizBtn" class="w-full text-left px-4 py-2 rounded bg-[#7ee8c1] text-[#2e2e2e] font-semibold hover:bg-[#5ccaa6]">틈새 지식 퀴즈</button>
+      <button id="menuNewsBtn" class="w-full text-left px-4 py-2 rounded bg-[#7ee8c1] text-[#2e2e2e] font-semibold hover:bg-[#5ccaa6]">요약 뉴스 피드</button>
     </div>
   </div>
 
-
+  <!-- Main -->
   <main class="max-w-4xl mx-auto p-6">
     <div id="loading" class="hidden fixed inset-0 flex items-center justify-center bg-black/70 z-50">
       <div class="animate-spin rounded-full h-16 w-16 border-4 border-[#d6d6d6] border-t-[#7ee8c1]"></div>
     </div>
 
+    <!-- QUIZ -->
     <section id="quiz" class="quiz active">
       <h2 class="text-xl font-semibold mb-4 text-[#7ee8c1]">GPT 퀴즈 생성</h2>
       <div class="flex flex-col sm:flex-row gap-3 mb-4">
         <input type="text" id="topicInput" placeholder="주제를 입력하세요" class="input-box" />
-        <button onclick="generateQuiz()" class="btn-primary">퀴즈 생성</button>
-        <button onclick="generateBalanceGame()" class="btn-secondary">랜덤 밸런스게임</button>
+        <button id="generateQuizBtn" class="btn-primary">퀴즈 생성</button>
+        <button id="generateBalanceBtn" class="btn-secondary">랜덤 밸런스게임</button>
       </div>
       <ul id="quizList" class="space-y-4"></ul>
     </section>
 
+    <!-- NEWS -->
     <section id="news" class="news hidden">
       <h2 class="text-xl font-semibold mb-4 text-[#7ee8c1]">네이버 뉴스 검색</h2>
       <div class="flex flex-col sm:flex-row gap-3 mb-4">
         <input type="text" id="newsInput" placeholder="검색어 입력" class="input-box" />
-        <button onclick="searchNews()" class="btn-primary">뉴스 검색</button>
-        <button onclick="summarizeNews()" class="btn-secondary">뉴스 요약 보기</button>
+        <button id="searchNewsBtn" class="btn-primary">뉴스 검색</button>
+        <button id="summarizeNewsBtn" class="btn-secondary">뉴스 요약 보기</button>
       </div>
       <div id="newsSummary" class="mb-6"></div>
       <ul id="newsList" class="space-y-4"></ul>
     </section>
   </main>
 
+  <!-- Main JS -->
   <script src="./js/main.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      // 햄버거 열기
+      document.getElementById("hamburgerBtn").addEventListener("click", () => {
+        mobileMenu.classList.toggle("translate-x-full");
+      });
+
+      // 햄버거 닫기
+      document.getElementById("menuCloseBtn").addEventListener("click", () => {
+        mobileMenu.classList.add("translate-x-full");
+      });
+
+      // 메뉴 항목 클릭 시
+      document.getElementById("menuQuizBtn").addEventListener("click", () => {
+        showSection('quiz');
+        mobileMenu.classList.add("translate-x-full");
+      });
+
+      document.getElementById("menuNewsBtn").addEventListener("click", () => {
+        showSection('news');
+        mobileMenu.classList.add("translate-x-full");
+      });
+
+      // 로고 클릭 시 홈으로
+      document.getElementById("logo").addEventListener("click", () => {
+        showSection('quiz');
+      });
+
+      // 버튼 연결
+      document.getElementById("generateQuizBtn").addEventListener("click", generateQuiz);
+      document.getElementById("generateBalanceBtn").addEventListener("click", generateBalanceGame);
+      document.getElementById("searchNewsBtn").addEventListener("click", searchNews);
+      document.getElementById("summarizeNewsBtn").addEventListener("click", summarizeNews);
+    });
+  </script>
 </body>
 </html>

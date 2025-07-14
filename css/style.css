@@ -20,6 +20,22 @@
 
 #mobileMenu {
   transition: transform 0.3s ease-in-out;
+  transform: translateX(100%);
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 16rem; /* 64 */
+  background-color: #3a3a3a;
+  z-index: 40;
+}
+
+#mobileMenu.open {
+  transform: translateX(0);
+}
+
+button {
+  pointer-events: auto;
 }
 
 .btn-primary {

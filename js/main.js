@@ -16,6 +16,21 @@ const apiBase = "https://quizn2ews.onrender.com/api";
       const menu = document.getElementById("mobileMenu");
       menu.classList.toggle("translate-x-full");
     }
+    
+    // JS 코드 (main.js 하단)
+    document.addEventListener("DOMContentLoaded", () => {
+      const menu = document.getElementById("mobileMenu");
+      const button = document.getElementById("hamburgerBtn");
+    
+      button.addEventListener("click", () => {
+        menu.classList.toggle("open");
+      });
+    
+      // 메뉴 안 닫기 버튼도 연결
+      document.querySelectorAll("#mobileMenu button").forEach(btn => {
+        btn.addEventListener("click", () => menu.classList.remove("open"));
+      });
+    });
 
     // 퀴즈생성 함수
     async function generateQuiz() {
