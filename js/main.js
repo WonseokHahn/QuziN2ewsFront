@@ -1,199 +1,432 @@
-const apiBase = 'https://quizn2ews.onrender.com/api';
+// 비 난독화 버전
 
-function showSection(_0x328e07) {
-    document['querySelectorAll']('.quiz,\x20.news,\x20.fortune')['forEach'](_0x11a57a => _0x11a57a['classList']['add']('hidden')), document['getElementById'](_0x328e07)['classList']['remove']('hidden');
-}
-function toggleLoading(_0x148267) {
-    document['getElementById']('loading')['classList']['toggle']('hidden', !_0x148267);
-}
-function toggleMenu() {
-    const _0x396d4d = document['getElementById']('mobileMenu');
-    _0x396d4d['classList']['toggle']('translate-x-full');
-}
-document['addEventListener']('DOMContentLoaded', () => {
-    const _0x1349e2 = document['getElementById']('mobileMenu'), _0x464fbe = document['getElementById']('hamburgerBtn');
-    _0x464fbe['addEventListener']('click', () => {
-        _0x1349e2['classList']['toggle']('open');
-    });
-    const _0x48db8c = document['getElementById']('mobileMenu');
-    document['getElementById']('hamburgerBtn')['addEventListener']('click', () => {
-        _0x48db8c['classList']['toggle']('translate-x-full');
-    }), document['getElementById']('menuCloseBtn')['addEventListener']('click', () => {
-        _0x48db8c['classList']['add']('translate-x-full');
-    }), document['getElementById']('menuQuizBtn')['addEventListener']('click', () => {
-        showSection('quiz'), _0x48db8c['classList']['add']('translate-x-full');
-    }), document['getElementById']('menuNewsBtn')['addEventListener']('click', () => {
-        showSection('news'), _0x48db8c['classList']['add']('translate-x-full');
-    }), document['getElementById']('menuFortuneBtn')['addEventListener']('click', () => {
-        showSection('fortune'), _0x48db8c['classList']['add']('translate-x-full');
-    }), document['getElementById']('logo')['addEventListener']('click', () => {
+const apiBase = "https://quizn2ews.onrender.com/api";
+    
+    // ID를 통해 보여주는 화면을 선택
+    function showSection(section) {
+      document.querySelectorAll('.quiz, .news, .fortune').forEach(el => el.classList.add('hidden'));
+      document.getElementById(section).classList.remove('hidden');
+    }
+
+    // 스피너  
+    function toggleLoading(show) {
+      document.getElementById("loading").classList.toggle("hidden", !show);
+    }
+
+    // 햄버거 메뉴
+    function toggleMenu() {
+      const menu = document.getElementById("mobileMenu");
+      menu.classList.toggle("translate-x-full");
+    }
+
+    // JS 코드 (main.js 하단)
+    document.addEventListener("DOMContentLoaded", () => {
+      const menu = document.getElementById("mobileMenu");
+      const button = document.getElementById("hamburgerBtn");
+    
+      button.addEventListener("click", () => {
+        menu.classList.toggle("open");
+      });
+      
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      // 햄버거 열기
+      document.getElementById("hamburgerBtn").addEventListener("click", () => {
+        mobileMenu.classList.toggle("translate-x-full");
+      });
+
+      // 햄버거 닫기
+      document.getElementById("menuCloseBtn").addEventListener("click", () => {
+        mobileMenu.classList.add("translate-x-full");
+      });
+      
+      // 메뉴 항목 클릭 시
+      document.getElementById("menuQuizBtn").addEventListener("click", () => {
         showSection('quiz');
-    }), document['getElementById']('generateQuizBtn')['addEventListener']('click', generateQuiz), document['getElementById']('generateBalanceBtn')['addEventListener']('click', generateBalanceGame), document['getElementById']('searchNewsBtn')['addEventListener']('click', searchNews), document['getElementById']('summarizeNewsBtn')['addEventListener']('click', summarizeNews), document['getElementById']('getFortuneBtn')['addEventListener']('click', getFortune), document['querySelectorAll']('#mobileMenu\x20button')['forEach'](_0x2f327a => {
-        _0x2f327a['addEventListener']('click', () => _0x1349e2['classList']['remove']('open'));
-    }), document['addEventListener']('click', _0x21bc5e => {
-        _0x1349e2['classList']['contains']('open') && (!_0x48db8c['contains'](_0x21bc5e['target']) && !hamburgerBtn['contains'](_0x21bc5e['target']) && _0x1349e2['classList']['remove']('open'));
+        mobileMenu.classList.add("translate-x-full");
+      });
+
+      document.getElementById("menuNewsBtn").addEventListener("click", () => {
+        showSection('news');
+        mobileMenu.classList.add("translate-x-full");
+      });
+
+      document.getElementById("menuFortuneBtn").addEventListener("click", () => {
+        showSection("fortune");
+        mobileMenu.classList.add("translate-x-full");
+      });
+
+      // 로고 클릭 시 홈으로
+      document.getElementById("logo").addEventListener("click", () => {
+        showSection('quiz');
+      });
+
+      // 버튼 연결
+      document.getElementById("generateQuizBtn").addEventListener("click", generateQuiz);
+      document.getElementById("generateBalanceBtn").addEventListener("click", generateBalanceGame);
+      document.getElementById("searchNewsBtn").addEventListener("click", searchNews);
+      document.getElementById("summarizeNewsBtn").addEventListener("click", summarizeNews);
+      document.getElementById("getFortuneBtn").addEventListener("click", getFortune);
+
+      // 메뉴 안 닫기 버튼도 연결
+      document.querySelectorAll("#mobileMenu button").forEach(btn => {
+        btn.addEventListener("click", () => menu.classList.remove("open"));
+      });
+
+      // 외부 클릭 시 메뉴 닫기
+      document.addEventListener("click", (event) => {
+            
+        if(menu.classList.contains("open")){
+          if (!mobileMenu.contains(event.target) && !hamburgerBtn.contains(event.target)) {
+            menu.classList.remove("open");
+          }  
+        }
+      });
+
     });
-}), document['addEventListener']('DOMContentLoaded', () => {
-    const _0x1cf563 = document['getElementById']('fortuneEtc'), _0x3f57b8 = document['getElementById']('fortuneCustom');
-    _0x1cf563['addEventListener']('change', () => {
-        _0x3f57b8['classList']['toggle']('hidden', !_0x1cf563['checked']);
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const etcCheckbox = document.getElementById("fortuneEtc");
+      const customInput = document.getElementById("fortuneCustom");
+
+      etcCheckbox.addEventListener("change", () => {
+        customInput.classList.toggle("hidden", !etcCheckbox.checked);
+      });
+
+      // --- 사주 섹션 localStorage 로직 추가 ---
+    
+      // 사주 입력 필드 요소들 가져오기 (이 부분은 이전 오류의 원인이 아니므로 기존 위치에 추가)
+      const fortuneNameInput = document.getElementById("fortuneName");
+      const fortuneBirthInput = document.getElementById("fortuneBirth");
+      const birthHourSelect = document.getElementById("birthHour");
+      const birthMinuteSelect = document.getElementById("birthMinute");
+
+      // 사주 입력 값을 localStorage에 저장하는 함수
+      const saveFortuneInputs = () => {
+        localStorage.setItem('fortuneName', fortuneNameInput.value);
+        localStorage.setItem('fortuneBirth', fortuneBirthInput.value);
+        localStorage.setItem('birthHour', birthHourSelect.value);
+        localStorage.setItem('birthMinute', birthMinuteSelect.value);
+      };
+    
+      // localStorage에서 사주 입력 값을 불러오는 함수
+      const loadFortuneInputs = () => {
+        fortuneNameInput.value = localStorage.getItem('fortuneName') || '';
+        fortuneBirthInput.value = localStorage.getItem('fortuneBirth') || '';
+        birthHourSelect.value = localStorage.getItem('birthHour') || '00'; // 기본값 '00'
+        birthMinuteSelect.value = localStorage.getItem('birthMinute') || '00'; // 기본값 '00'
+      };
+    
+      // 입력 필드 값이 변경될 때마다 저장
+      fortuneNameInput.addEventListener('input', saveFortuneInputs);
+      fortuneBirthInput.addEventListener('change', saveFortuneInputs);
+      birthHourSelect.addEventListener('change', saveFortuneInputs);
+      birthMinuteSelect.addEventListener('change', saveFortuneInputs);
+    
+      // DOM 로드 시 사주 입력 값 초기 불러오기
+      loadFortuneInputs();
     });
-    const _0x2ca2ea = document['getElementById']('fortuneName'), _0x5c7911 = document['getElementById']('fortuneBirth'), _0x4d5c65 = document['getElementById']('birthHour'), _0x2c449a = document['getElementById']('birthMinute'), _0x4aaa08 = () => {
-            localStorage['setItem']('fortuneName', _0x2ca2ea['value']), localStorage['setItem']('fortuneBirth', _0x5c7911['value']), localStorage['setItem']('birthHour', _0x4d5c65['value']), localStorage['setItem']('birthMinute', _0x2c449a['value']);
-        }, _0xbdee42 = () => {
-            _0x2ca2ea['value'] = localStorage['getItem']('fortuneName') || '', _0x5c7911['value'] = localStorage['getItem']('fortuneBirth') || '', _0x4d5c65['value'] = localStorage['getItem']('birthHour') || '00', _0x2c449a['value'] = localStorage['getItem']('birthMinute') || '00';
-        };
-    _0x2ca2ea['addEventListener']('input', _0x4aaa08), _0x5c7911['addEventListener']('change', _0x4aaa08), _0x4d5c65['addEventListener']('change', _0x4aaa08), _0x2c449a['addEventListener']('change', _0x4aaa08), _0xbdee42();
-});
-async function generateQuiz() {
-    const _0x29e2a6 = document['getElementById']('topicInput')['value'] || '상식', _0x3c4d50 = document['getElementById']('quizList');
-    _0x3c4d50['innerHTML'] = '', toggleLoading(!![]);
-    try {
-        const _0x467a99 = await fetch(apiBase + '/quiz/gpt?topic=' + encodeURIComponent(_0x29e2a6) + '&count=3'), _0x4f7820 = await _0x467a99['json']();
-        displayQuiz(_0x4f7820);
-    } catch (_0x28bede) {
-        _0x3c4d50['innerHTML'] = '<li\x20class=\x22bg-[#4a4a4a]\x20p-4\x20rounded-lg\x20shadow\x22>퀴즈\x20생성\x20실패:\x20' + _0x28bede['message'] + '</li>';
-    } finally {
-        toggleLoading(![]);
+
+
+    // 퀴즈생성 함수
+    async function generateQuiz() {
+      const topic = document.getElementById("topicInput").value || "상식";
+      const quizList = document.getElementById("quizList");
+      quizList.innerHTML = "";
+      toggleLoading(true);
+      try {
+        const res = await fetch(`${apiBase}/quiz/gpt?topic=${encodeURIComponent(topic)}&count=3`);
+        const data = await res.json();
+        displayQuiz(data);
+      } catch (error) {
+        quizList.innerHTML = `<li class="bg-[#4a4a4a] p-4 rounded-lg shadow">퀴즈 생성 실패: ${error.message}</li>`;
+      } finally {
+        toggleLoading(false);
+      }
     }
-}
-function displayQuiz(_0xe72be) {
-    const _0x5f0f6a = document['getElementById']('quizList');
-    _0x5f0f6a['innerHTML'] = '';
-    if (!Array['isArray'](_0xe72be)) {
-        _0x5f0f6a['innerHTML'] = '<li\x20class=\x22bg-[#4a4a4a]\x20p-4\x20rounded-lg\x20shadow\x22>퀴즈\x20생성\x20실패:\x20' + (_0xe72be['error'] || '알\x20수\x20없는\x20오류') + '</li>';
+
+    // 생성된 퀴즈 조회 함수
+    function displayQuiz(data) {
+      const quizList = document.getElementById("quizList");
+      quizList.innerHTML = "";
+
+      if (!Array.isArray(data)) {
+        quizList.innerHTML = `<li class="bg-[#4a4a4a] p-4 rounded-lg shadow">퀴즈 생성 실패: ${data.error || '알 수 없는 오류'}</li>`;
         return;
+      }
+
+      data.forEach((quiz, index) => {
+        const quizId = `quiz-${index}`;
+        const answerId = `answer-${index}`;
+        const choiceId = `choices-${index}`;
+
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <div class="bg-[#4a4a4a] p-6 rounded-xl shadow-md transition-all duration-300" id="${quizId}">
+            <p class="font-semibold mb-4 text-lg text-[#7ee8c1]">${index + 1}. ${quiz.question}</p>
+            <form id="${choiceId}" class="space-y-2 mb-4">
+              ${quiz.choices.map((choice, i) => {
+                const label = String.fromCharCode(65 + i);
+                const hasPrefix = /^[a-dA-D]\./.test(choice.trim());
+                const display = hasPrefix ? choice : `${label}. ${choice}`;
+                return `
+                  <label class="block transition-all duration-200 border border-[#555555] rounded px-4 py-3 cursor-pointer bg-[#2e2e2e] hover:bg-[#444]">
+                    <input type="radio" name="quiz-${index}" value="${choice}" class="hidden" onchange="checkAnswer('${quizId}', this, '${quiz.answer}')"/>
+                    <span class="inline-block text-[#d6d6d6]">${display}</span>
+                  </label>
+                `;
+              }).join("")}
+            </form>
+            <div class="flex gap-3 items-center">
+              <span id="${answerId}" class="text-sm text-[#999] cursor-pointer hover:text-[#7ee8c1] hover:underline select-none" onclick="toggleAnswer('${answerId}', '${quiz.answer}')">정답 보기</span>
+              <button class="text-sm px-3 py-1 bg-[#3a3a3a] hover:bg-[#505050] border border-[#555555] rounded text-[#d6d6d6] transition select-none" onclick="resetQuiz('${quizId}', '${choiceId}', '${answerId}')">🔄 다시 풀기</button>
+            </div>
+          </div>
+        `;
+        quizList.appendChild(li);
+      });
     }
-    _0xe72be['forEach']((_0x135344, _0x3ec57c) => {
-        const _0x5528a6 = 'quiz-' + _0x3ec57c, _0x227083 = 'answer-' + _0x3ec57c, _0x32b783 = 'choices-' + _0x3ec57c, _0x25b4b5 = document['createElement']('li');
-        _0x25b4b5['innerHTML'] = '\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22bg-[#4a4a4a]\x20p-6\x20rounded-xl\x20shadow-md\x20transition-all\x20duration-300\x22\x20id=\x22' + _0x5528a6 + '\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22font-semibold\x20mb-4\x20text-lg\x20text-[#7ee8c1]\x22>' + (_0x3ec57c + 0x1) + '.\x20' + _0x135344['question'] + '</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<form\x20id=\x22' + _0x32b783 + '\x22\x20class=\x22space-y-2\x20mb-4\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20' + _0x135344['choices']['map']((_0x59140a, _0x57a40e) => {
-            const _0x55f245 = String['fromCharCode'](0x41 + _0x57a40e), _0x214ef6 = /^[a-dA-D]\./['test'](_0x59140a['trim']()), _0x336ac2 = _0x214ef6 ? _0x59140a : _0x55f245 + '.\x20' + _0x59140a;
-            return '\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<label\x20class=\x22block\x20transition-all\x20duration-200\x20border\x20border-[#555555]\x20rounded\x20px-4\x20py-3\x20cursor-pointer\x20bg-[#2e2e2e]\x20hover:bg-[#444]\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<input\x20type=\x22radio\x22\x20name=\x22quiz-' + _0x3ec57c + '\x22\x20value=\x22' + _0x59140a + '\x22\x20class=\x22hidden\x22\x20onchange=\x22checkAnswer(\x27' + _0x5528a6 + '\x27,\x20this,\x20\x27' + _0x135344['answer'] + '\x27)\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22inline-block\x20text-[#d6d6d6]\x22>' + _0x336ac2 + '</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</label>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20';
-        })['join']('') + '\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</form>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22flex\x20gap-3\x20items-center\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20id=\x22' + _0x227083 + '\x22\x20class=\x22text-sm\x20text-[#999]\x20cursor-pointer\x20hover:text-[#7ee8c1]\x20hover:underline\x20select-none\x22\x20onclick=\x22toggleAnswer(\x27' + _0x227083 + '\x27,\x20\x27' + _0x135344['answer'] + '\x27)\x22>정답\x20보기</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22text-sm\x20px-3\x20py-1\x20bg-[#3a3a3a]\x20hover:bg-[#505050]\x20border\x20border-[#555555]\x20rounded\x20text-[#d6d6d6]\x20transition\x20select-none\x22\x20onclick=\x22resetQuiz(\x27' + _0x5528a6 + '\x27,\x20\x27' + _0x32b783 + '\x27,\x20\x27' + _0x227083 + '\x27)\x22>🔄\x20다시\x20풀기</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20', _0x5f0f6a['appendChild'](_0x25b4b5);
-    });
-}
-function checkAnswer(_0x43652d, _0x403a23, _0x2ad402) {
-    const _0x317898 = document['getElementById'](_0x43652d), _0x3c4ae3 = _0x317898['querySelectorAll']('label');
-    _0x3c4ae3['forEach'](_0x5081e1 => {
-        const _0x4bcf29 = _0x5081e1['querySelector']('input');
-        _0x5081e1['classList']['remove']('bg-red-800', 'bg-green-800', 'animate-bounce', 'animate-shake', 'shadow-md');
-        const _0x48efde = _0x5081e1['querySelector']('.result-icon');
-        if (_0x48efde)
-            _0x48efde['remove']();
-        if (_0x4bcf29['checked']) {
-            if (_0x4bcf29['value'] === _0x2ad402) {
-                _0x5081e1['classList']['add']('bg-green-800', 'shadow-md', 'animate-bounce');
-                const _0x39f08b = document['createElement']('span');
-                _0x39f08b['textContent'] = '✅', _0x39f08b['className'] = 'ml-2\x20result-icon\x20text-green-400', _0x5081e1['appendChild'](_0x39f08b);
-            } else {
-                _0x5081e1['classList']['add']('bg-red-800', 'animate-shake');
-                const _0xf1f1b7 = document['createElement']('span');
-                _0xf1f1b7['textContent'] = '❌', _0xf1f1b7['className'] = 'ml-2\x20result-icon\x20text-red-500', _0x5081e1['appendChild'](_0xf1f1b7);
-            }
+
+    // Quiz 정답 체크 함수
+    function checkAnswer(quizId, inputEl, correctAnswer) {
+      const quizBox = document.getElementById(quizId);
+      const labels = quizBox.querySelectorAll("label");
+
+      labels.forEach(label => {
+        const input = label.querySelector("input");
+        label.classList.remove("bg-red-800", "bg-green-800", "animate-bounce", "animate-shake", "shadow-md");
+
+        const icon = label.querySelector(".result-icon");
+        if (icon) icon.remove();
+
+        if (input.checked) {
+          if (input.value === correctAnswer) {
+            label.classList.add("bg-green-800", "shadow-md", "animate-bounce");
+            const iconSpan = document.createElement("span");
+            iconSpan.textContent = "✅";
+            iconSpan.className = "ml-2 result-icon text-green-400";
+            label.appendChild(iconSpan);
+          } else {
+            label.classList.add("bg-red-800", "animate-shake");
+            const iconSpan = document.createElement("span");
+            iconSpan.textContent = "❌";
+            iconSpan.className = "ml-2 result-icon text-red-500";
+            label.appendChild(iconSpan);
+          }
         }
-    }), _0x317898['querySelectorAll']('input')['forEach'](_0x37ceba => _0x37ceba['disabled'] = !![]);
-}
-function resetQuiz(_0x1133f5, _0x3981a8, _0x562e6b) {
-    const _0xac7a6b = document['getElementById'](_0x1133f5), _0x12ddbf = document['getElementById'](_0x3981a8);
-    _0x12ddbf['querySelectorAll']('input')['forEach'](_0x2457cb => {
-        _0x2457cb['checked'] = ![], _0x2457cb['disabled'] = ![];
-    }), _0x12ddbf['querySelectorAll']('label')['forEach'](_0x5dad4b => {
-        _0x5dad4b['classList']['remove']('bg-red-800', 'bg-green-800', 'animate-bounce', 'animate-shake', 'shadow-md');
-        const _0x2c8246 = _0x5dad4b['querySelector']('.result-icon');
-        if (_0x2c8246)
-            _0x2c8246['remove']();
-    });
-    const _0x3a6ef9 = document['getElementById'](_0x562e6b);
-    _0x3a6ef9['textContent'] = '정답\x20보기', _0x3a6ef9['classList']['remove']('revealed');
-}
-function toggleAnswer(_0x226f1e, _0x2838b1) {
-    const _0xa14f03 = document['getElementById'](_0x226f1e);
-    _0xa14f03['classList']['contains']('revealed') ? (_0xa14f03['textContent'] = '정답\x20보기', _0xa14f03['classList']['remove']('revealed')) : (_0xa14f03['textContent'] = '정답:\x20' + _0x2838b1, _0xa14f03['classList']['add']('revealed'));
-}
-async function generateBalanceGame() {
-    const _0x1e2b7a = document['getElementById']('quizList');
-    _0x1e2b7a['innerHTML'] = '', toggleLoading(!![]);
-    try {
-        const _0x55167c = await fetch(apiBase + '/quiz/balance?count=1'), _0x492fc0 = await _0x55167c['json']();
-        if (!Array['isArray'](_0x492fc0) || typeof _0x492fc0[0x0] !== 'string' || !_0x492fc0[0x0]['includes']('VS')) {
-            _0x1e2b7a['innerHTML'] = '<li\x20class=\x22bg-[#4a4a4a]\x20p-4\x20rounded-lg\x20shadow-md\x22>밸런스\x20게임\x20데이터를\x20불러오지\x20못했습니다.</li>';
-            return;
-        }
-        let _0x424f10 = _0x492fc0[0x0];
-        _0x424f10['startsWith']('\x22') && _0x424f10['endsWith']('\x22') && (_0x424f10 = _0x424f10['slice'](0x1, -0x1));
-        const [_0x440b12, _0x13bdc3] = _0x424f10['split']('VS')['map'](_0x5c3bd0 => _0x5c3bd0['trim']()), _0xfd493a = document['createElement']('li');
-        _0xfd493a['innerHTML'] = '\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22bg-[#4a4a4a]\x20p-4\x20rounded-lg\x20shadow-md\x20text-center\x20font-bold\x20text-lg\x20text-[#7ee8c1]\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20' + _0x440b12 + '\x20<span\x20class=\x22text-[#999999]\x22>VS</span>\x20' + _0x13bdc3 + '\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20', _0x1e2b7a['appendChild'](_0xfd493a);
-    } catch (_0x2c879a) {
-        _0x1e2b7a['innerHTML'] = '<li\x20class=\x22bg-[#4a4a4a]\x20p-4\x20rounded-lg\x20shadow-md\x22>오류\x20발생:\x20' + _0x2c879a['message'] + '</li>';
-    } finally {
-        toggleLoading(![]);
+      });
+
+      quizBox.querySelectorAll("input").forEach(i => i.disabled = true);
     }
-}
-async function searchNews() {
-    const _0x571b46 = document['getElementById']('newsInput')['value'] || '주요\x20뉴스', _0x2614eb = document['getElementById']('newsList'), _0x1b4f5c = document['getElementById']('newsSummary');
-    _0x2614eb['innerHTML'] = '', _0x1b4f5c['innerHTML'] = '', toggleLoading(!![]);
-    try {
-        const _0x49b798 = await fetch(apiBase + '/news/search?q=' + encodeURIComponent(_0x571b46) + '&display=5'), _0x90dc82 = await _0x49b798['json']();
-        if (!Array['isArray'](_0x90dc82['items'])) {
-            _0x2614eb['innerHTML'] = '<li\x20class=\x22bg-[#4a4a4a]\x20p-4\x20rounded-lg\x20shadow-md\x22>뉴스\x20검색\x20실패:\x20' + (_0x90dc82['error'] || '알\x20수\x20없는\x20오류') + '</li>';
-            return;
+
+    // 정답보기 / 다시풀기 함수
+    function resetQuiz(quizId, formId, answerId) {
+      const quizBox = document.getElementById(quizId);
+      const form = document.getElementById(formId);
+
+      form.querySelectorAll("input").forEach(input => {
+        input.checked = false;
+        input.disabled = false;
+      });
+
+      form.querySelectorAll("label").forEach(label => {
+        label.classList.remove("bg-red-800", "bg-green-800", "animate-bounce", "animate-shake", "shadow-md");
+        const icon = label.querySelector(".result-icon");
+        if (icon) icon.remove();
+      });
+
+      const answerEl = document.getElementById(answerId);
+      answerEl.textContent = "정답 보기";
+      answerEl.classList.remove("revealed");
+    }
+
+    function toggleAnswer(id, answer) {
+      const el = document.getElementById(id);
+      if (el.classList.contains('revealed')) {
+        el.textContent = '정답 보기';
+        el.classList.remove('revealed');
+      } else {
+        el.textContent = `정답: ${answer}`;
+        el.classList.add('revealed');
+      }
+    }
+
+    // 랜덤밸런스게임조회 함수
+    async function generateBalanceGame() {
+      const quizList = document.getElementById("quizList");
+      quizList.innerHTML = "";
+      toggleLoading(true);
+      try {
+        const res = await fetch(`${apiBase}/quiz/balance?count=1`);
+        const data = await res.json();
+        if (!Array.isArray(data) || typeof data[0] !== 'string' || !data[0].includes("VS")) {
+          quizList.innerHTML = `<li class="bg-[#4a4a4a] p-4 rounded-lg shadow-md">밸런스 게임 데이터를 불러오지 못했습니다.</li>`;
+          return;
         }
-        _0x90dc82['items']['forEach']((_0x266bd0, _0x39f9c5) => {
-            const _0x1a37d4 = document['createElement']('li');
-            _0x1a37d4['innerHTML'] = '\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22bg-[#4a4a4a]\x20p-4\x20rounded-lg\x20shadow-md\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<strong\x20class=\x22text-[#7ee8c1]\x22>' + (_0x39f9c5 + 0x1) + '.\x20<a\x20href=\x22' + _0x266bd0['link'] + '\x22\x20target=\x22_blank\x22\x20class=\x22hover:underline\x22>' + _0x266bd0['title'] + '</a></strong>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22text-sm\x20text-[#999999]\x22>' + _0x266bd0['pubDate'] + '</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20', _0x2614eb['appendChild'](_0x1a37d4);
+        let processedText = data[0];
+        if (processedText.startsWith('"') && processedText.endsWith('"')) {
+          processedText = processedText.slice(1, -1);
+        }
+        const [opt1, opt2] = processedText.split("VS").map(str => str.trim());
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <div class="bg-[#4a4a4a] p-4 rounded-lg shadow-md text-center font-bold text-lg text-[#7ee8c1]">
+            ${opt1} <span class="text-[#999999]">VS</span> ${opt2}
+          </div>
+        `;
+        quizList.appendChild(li);
+      } catch (err) {
+        quizList.innerHTML = `<li class="bg-[#4a4a4a] p-4 rounded-lg shadow-md">오류 발생: ${err.message}</li>`;
+      } finally {
+        toggleLoading(false);
+      }
+    }
+
+    // 뉴스 생성 함수
+    async function searchNews() {
+      const query = document.getElementById("newsInput").value || "주요 뉴스";
+      const newsList = document.getElementById("newsList");
+      const newsSummary = document.getElementById("newsSummary");
+      newsList.innerHTML = "";
+      newsSummary.innerHTML = "";
+      toggleLoading(true);
+      try {
+        const res = await fetch(`${apiBase}/news/search?q=${encodeURIComponent(query)}&display=5`);
+        const data = await res.json();
+        if (!Array.isArray(data.items)) {
+          newsList.innerHTML = `<li class="bg-[#4a4a4a] p-4 rounded-lg shadow-md">뉴스 검색 실패: ${data.error || '알 수 없는 오류'}</li>`;
+          return;
+        }
+        data.items.forEach((item, index) => {
+          const li = document.createElement("li");
+          li.innerHTML = `
+            <div class="bg-[#4a4a4a] p-4 rounded-lg shadow-md">
+              <strong class="text-[#7ee8c1]">${index + 1}. <a href="${item.link}" target="_blank" class="hover:underline">${item.title}</a></strong>
+              <p class="text-sm text-[#999999]">${item.pubDate}</p>
+            </div>
+          `;
+          newsList.appendChild(li);
         });
-    } catch (_0x5a71e4) {
-        _0x2614eb['innerHTML'] = '<li\x20class=\x22bg-[#4a4a4a]\x20p-4\x20rounded-lg\x20shadow-md\x22>뉴스\x20요청\x20실패:\x20' + _0x5a71e4['message'] + '</li>';
-    } finally {
-        toggleLoading(![]);
+      } catch (err) {
+        newsList.innerHTML = `<li class="bg-[#4a4a4a] p-4 rounded-lg shadow-md">뉴스 요청 실패: ${err.message}</li>`;
+      } finally {
+        toggleLoading(false);
+      }
     }
-}
-async function summarizeNews() {
-    const _0x536f6f = document['getElementById']('newsInput')['value'] || '주요\x20뉴스', _0x545aad = document['getElementById']('newsSummary');
-    _0x545aad['innerHTML'] = '', toggleLoading(!![]);
-    try {
-        const _0x44bb27 = await fetch(apiBase + '/news/summary?q=' + encodeURIComponent(_0x536f6f) + '&display=5'), _0x17326e = await _0x44bb27['json'](), _0x5c0e43 = _0x17326e['summary']['split'](/(?<=[.!?])\s+/);
-        let _0x2bef38 = '';
-        _0x5c0e43['forEach']((_0x1c9e3b, _0x143d36) => {
-            _0x2bef38 += _0x1c9e3b + ((_0x143d36 + 0x1) % 0x2 === 0x0 ? '<br><br>' : '\x20');
-        }), _0x17326e['summary'] ? _0x545aad['innerHTML'] = '\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20\x20class=\x22bg-[#4a4a4a]/90\x20text-[#e0f2f1]\x20p-4\x20rounded-lg\x20shadow-md\x20text-base\x20leading-relaxed\x20break-words\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<strong\x20class=\x22block\x20mb-2\x20text-[#7ee8c1]\x22>뉴스\x20요약:</strong>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22text-base\x20leading-relaxed\x22>' + _0x2bef38 + '</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20' : _0x545aad['innerHTML'] = '<div\x20class=\x22bg-[#4a4a4a]\x20p-4\x20rounded-lg\x20shadow-md\x22>뉴스\x20요약\x20실패</div>';
-    } catch (_0x131d72) {
-        _0x545aad['innerHTML'] = '<div\x20class=\x22bg-[#4a4a4a]\x20p-4\x20rounded-lg\x20shadow-md\x22>오류:\x20' + _0x131d72['message'] + '</div>';
-    } finally {
-        toggleLoading(![]);
+
+    // 뉴스 요약 함수
+    async function summarizeNews() {
+      const query = document.getElementById("newsInput").value || "주요 뉴스";
+      const newsSummary = document.getElementById("newsSummary");
+      newsSummary.innerHTML = "";
+      toggleLoading(true);
+      try {
+        const res = await fetch(`${apiBase}/news/summary?q=${encodeURIComponent(query)}&display=5`);
+        const data = await res.json();
+
+        const sentences = data.summary.split(/(?<=[.!?])\s+/);
+        let formatted = '';
+        sentences.forEach((s, i) => {
+          formatted += s + ((i + 1) % 2 === 0 ? "<br><br>" : " ");
+        });
+
+        if (data.summary) {
+          newsSummary.innerHTML = `
+            <div  class="bg-[#4a4a4a]/90 text-[#e0f2f1] p-4 rounded-lg shadow-md text-base leading-relaxed break-words">
+              <strong class="block mb-2 text-[#7ee8c1]">뉴스 요약:</strong>
+              <p class="text-base leading-relaxed">${formatted}</p>
+            </div>
+          `;
+        } else {
+          newsSummary.innerHTML = `<div class="bg-[#4a4a4a] p-4 rounded-lg shadow-md">뉴스 요약 실패</div>`;
+        }
+      } catch (err) {
+        newsSummary.innerHTML = `<div class="bg-[#4a4a4a] p-4 rounded-lg shadow-md">오류: ${err.message}</div>`;
+      } finally {
+        toggleLoading(false);
+      }
     }
-}
-async function getFortune() {
-    const _0x2cc3c4 = document['getElementById']('fortuneName')['value']['trim'](), _0x8170bf = document['getElementById']('fortuneBirth')['value'], _0x1a26b8 = document['getElementById']('birthHour')['value'], _0x4930d7 = document['getElementById']('birthMinute')['value'], _0x48d280 = Array['from'](document['querySelectorAll']('.fortuneType:checked'))['map'](_0x1a29d6 => _0x1a29d6['value']), _0x42fcce = document['getElementById']('fortuneCustom')['value']['trim']();
-    if (_0x42fcce)
-        _0x48d280['push'](_0x42fcce);
-    const _0x5a1951 = document['getElementById']('fortuneResult');
-    _0x5a1951['innerHTML'] = '';
-    const _0x42b8da = [...document['querySelectorAll']('.fortuneType:checked')]['map'](_0x37a78a => _0x37a78a['value']);
-    let _0xbf22ae = _0x42b8da['filter'](_0x8d307f => _0x8d307f !== '기타');
-    if (_0x42b8da['includes']('기타')) {
-        const _0xf02ecc = document['getElementById']('fortuneCustom')['value']['trim']();
-        if (_0xf02ecc)
-            _0xbf22ae['push'](_0xf02ecc);
+
+    // 오늘의 사주
+    async function getFortune() {
+      const name = document.getElementById("fortuneName").value.trim();
+      const birth = document.getElementById("fortuneBirth").value;
+      const hour = document.getElementById("birthHour").value;
+      const minute = document.getElementById("birthMinute").value;
+      const types = Array.from(document.querySelectorAll(".fortuneType:checked")).map(el => el.value);
+      const custom = document.getElementById("fortuneCustom").value.trim();
+      if (custom) types.push(custom);
+    
+
+    // 여러 개 체크된 운세 항목 수집
+    const checkedTypes = [...document.querySelectorAll(".fortuneType:checked")].map(el => el.value);
+          
+    // 기타 체크됐으면 직접 입력값 포함
+    let topics = checkedTypes.filter(t => t !== "기타");
+    if (checkedTypes.includes("기타")) {
+      const custom = document.getElementById("fortuneCustom").value.trim();
+      if (custom) topics.push(custom);
     }
-    const _0x387d6c = document['getElementById']('fortuneResult');
-    _0x387d6c['innerHTML'] = '';
-    if (!_0x2cc3c4 || !_0x8170bf || !_0x1a26b8 || _0xbf22ae['length'] === 0x0) {
-        _0x387d6c['innerHTML'] = '<div\x20class=\x27text-red-400\x27>모든\x20항목을\x20입력해주세요.</div>';
-        return;
+          
+
+    if (!name || !birth || !hour || topics.length === 0) {
+      resultBox.innerHTML = `<div class='text-red-400'>모든 항목을 입력해주세요.</div>`;
+      return;
     }
-    const _0x537a3d = _0xbf22ae['join'](',\x20'), _0x4ce763 = _0x2cc3c4 + '의\x20생년월일\x20및\x20태어난\x20시간은\x20' + _0x8170bf + ',\x20' + _0x1a26b8 + ':' + _0x4930d7 + '입니다.\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20알려준\x20내용을\x20기준으로\x20' + _0x2cc3c4 + '의\x20' + _0x537a3d + '에\x20대한\x20오늘의\x20사주를\x20분석해서\x20상세하게\x20알려줘.';
-    toggleLoading(!![]);
-    try {
-        const _0xc4760a = await fetch(apiBase + '/fortune', {
-                'method': 'POST',
-                'headers': { 'Content-Type': 'application/json' },
-                'body': JSON['stringify']({ 'prompt': _0x4ce763 })
-            }), _0x14f9fa = await _0xc4760a['json']();
-        _0x14f9fa['result'] ? _0x5a1951['innerHTML'] = '<div\x20class=\x27bg-[#4a4a4a]\x20p-4\x20rounded\x20shadow\x20text-[#d6d6d6]\x20whitespace-pre-line\x27>' + _0x14f9fa['result'] + '</div>' : _0x5a1951['innerHTML'] = '<div\x20class=\x27bg-[#4a4a4a]\x20p-4\x20rounded\x27>사주\x20분석\x20실패</div>';
-    } catch (_0x497104) {
-        _0x5a1951['innerHTML'] = '<div\x20class=\x27bg-[#4a4a4a]\x20p-4\x20rounded\x27>오류:\x20' + _0x497104['message'] + '</div>';
-    } finally {
-        toggleLoading(![]);
+
+    // 선택된 운세 항목들을 쉼표로 연결
+    const topicStr = topics.join(", ");
+    
+    const prompt = `${name}의 생년월일 및 태어난 시간은 ${birth}, ${hour}:${minute}입니다. 
+                    오늘날짜와 알려준 내용을 기준으로 ${name}의 ${topicStr}에 대한 오늘의 운세를 상세하게 분석해서 알려주세요.
+                    생년월일을 기준으로 하는 별자리를 틀리는건 절대 안되니까 꼼꼼하게 확인해주세요.`;
+    
+    toggleLoading(true);
+    
+    // ========== 사주 분석 카드 애니메이션 ==========
+      try {
+        const res = await fetch(`${apiBase}/fortune`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt })
+        });
+        const data = await res.json();
+          
+        document.getElementById("fortuneResultText").innerText = data.result;
+
+        const card = document.getElementById("fortuneCard");
+        const blurOverlay = document.getElementById("blurOverlay"); // 블러 오버레이 요소 가져오기
+
+        blurOverlay.classList.remove("hidden"); // 오버레이 표시
+        setTimeout(() => {
+            blurOverlay.classList.add('backdrop-blur'); // 블러 효과 적용
+            card.classList.remove("hidden"); // 카드 표시
+            setTimeout(() => {
+                card.classList.remove("translate-y-full"); // 카드 위로 올리는 애니메이션 시작
+            }, 10);
+        }, 10); // hidden 클래스 제거 후 블러 효과가 적용될 약간의 시간 지연
+
+        
+      } catch (error) { // 'err' 대신 'error' 사용 일관성을 위해
+        console.error("운세 요청 실패:", error);
+        resultBox.innerHTML = `<div class='text-red-400'>운세 분석에 실패했습니다. 잠시 후 다시 시도해주세요.</div>`;
+      } finally {
+        toggleLoading(false);
+      }
+
+
+      // 닫기 버튼 클릭 시 카드 숨기기
+      document.getElementById("closeFortuneCard").addEventListener("click", () => {
+        const card = document.getElementById("fortuneCard");
+        const blurOverlay = document.getElementById("blurOverlay"); // 블러 오버레이 요소 가져오기
+
+        card.classList.add("translate-y-full"); // 카드 아래로 내리는 애니메이션 시작
+        blurOverlay.classList.remove('backdrop-blur'); // 블러 효과 제거
+
+        setTimeout(() => {
+          card.classList.add("hidden"); // 카드 숨기기 (애니메이션 완료 후)
+          blurOverlay.classList.add("hidden"); // 오버레이 숨기기 (블러 제거 애니메이션 완료 후)
+        }, 500); // transition-duration과 일치
+      });
     }
-}
+  

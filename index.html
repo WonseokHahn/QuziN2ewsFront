@@ -9,12 +9,10 @@
 </head>
 <body class="bg-[#2e2e2e] text-[#d6d6d6] min-h-screen font-sans">
   
-  <!-- Header -->
   <header class="bg-[#383838] text-[#d6d6d6] px-6 py-4 flex justify-between items-center shadow-md relative z-20">
     <h1 id="logo" class="text-2xl font-extrabold cursor-pointer select-none hover:text-[#7ee8c1] transition">
       QuizN2ews
     </h1>
-    <!-- 햄버거 버튼 -->
     <button id="hamburgerBtn" class="focus:outline-none">
       <svg class="w-8 h-8 text-[#7ee8c1]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
@@ -22,7 +20,6 @@
     </button>
   </header>
   
-  <!-- 슬라이드 메뉴 -->
   <div id="mobileMenu" class="fixed top-0 right-0 h-full w-64 bg-[#3a3a3a] text-[#d6d6d6] shadow-lg transform translate-x-full transition-transform duration-300 z-40">
     <div class="flex justify-between items-center px-6 py-4 border-b border-[#555]">
       <span class="text-lg font-bold">메뉴</span>
@@ -39,13 +36,11 @@
     </div>
   </div>
 
-  <!-- Main -->
-  <main class="max-w-4xl mx-auto p-6">
+  <main class="max-w-4xl mx-auto p-6 relative overflow-hidden">
     <div id="loading" class="hidden fixed inset-0 flex items-center justify-center bg-black/70 z-50">
       <div class="animate-spin rounded-full h-16 w-16 border-4 border-[#d6d6d6] border-t-[#7ee8c1]"></div>
     </div>
 
-    <!-- QUIZ -->
     <section id="quiz" class="quiz active">
       <h2 class="text-xl font-semibold mb-4 text-[#7ee8c1]">GPT 퀴즈 생성</h2>
       <div class="flex flex-col sm:flex-row gap-3 mb-4">
@@ -56,7 +51,6 @@
       <ul id="quizList" class="space-y-4"></ul>
     </section>
 
-    <!-- NEWS -->
     <section id="news" class="news hidden">
       <h2 class="text-xl font-semibold mb-4 text-[#7ee8c1]">네이버 뉴스 검색</h2>
       <div class="flex flex-col sm:flex-row gap-3 mb-4">
@@ -73,11 +67,9 @@
       <h2 class="text-xl font-semibold mb-4 text-[#7ee8c1]">오늘의 타로</h2>
       <div class="flex flex-col gap-3 mb-4">
 
-        <!-- 이름 입력 -->
         <input type="text" id="fortuneName" placeholder="이름" class="input-box w-full" />
 
-        <!-- 생년월일 -->
-        <input type="date" id="fortuneBirth" class="input-box w-full" placeholder="생년월일" />
+        <input type="date" id="fortuneBirth" class="input-box w-full" min="1800-01-01" max="9998-12-31" />
 
         <div class="flex gap-2">
           <select id="birthHour" class="input-box w-1/2">
@@ -107,7 +99,7 @@
             <option value="22">22시</option>
             <option value="23">23시</option>
           </select>
-        
+          
           <select id="birthMinute" class="input-box w-1/2">
             <option value="00">모름</option>
             <option value="00">00분</option>
@@ -118,7 +110,6 @@
         </div>
 
 
-        <!-- 운세 항목 (다중 선택) -->
         <div id="fortuneTypesBox" class="grid grid-cols-2 gap-2 bg-[#3a3a3a] p-4 rounded shadow-md">
           <label><input type="checkbox" class="fortuneType" value="금전운" /> 금전운</label>
           <label><input type="checkbox" class="fortuneType" value="취업운" /> 취업운</label>
@@ -128,21 +119,25 @@
           <label><input type="checkbox" class="fortuneType" value="기타" id="fortuneEtc" /> 기타</label>
         </div>
 
-        <!-- 기타 입력 -->
         <input type="text" id="fortuneCustom" placeholder="직접 입력할 운세 항목" class="input-box hidden w-full bg-[#3a3a3a] text-white" />
 
-        <!-- 버튼 -->
         <button id="getFortuneBtn" class="btn-primary w-full">사주 분석</button>
       </div>
-
-      <!-- 결과 -->
-      <div id="fortuneResult" class="mt-4"></div>
     </section>
   </main>
 
+  <div id="blurOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-500"></div>
 
-  <!-- Main JS -->
+  <div id="fortuneCard" class="hidden fixed inset-0 flex items-center justify-center z-50 transition-transform duration-500 transform translate-y-full">
+    <div class="bg-[#3a3a3a] text-[#d6d6d6] rounded-lg shadow-xl p-6 relative border-t-2 border-[#7ee8c1] w-11/12 h-5/6 max-w-2xl">
+      <button id="closeFortuneCard" class="absolute top-2 right-4 text-2xl text-[#7ee8c1] hover:text-red-400">&times;</button>
+      <h2 class="text-xl font-bold mb-2 text-[#7ee8c1]">🔮 사주 분석 결과</h2>
+      <p id="fortuneResultText" class="text-base leading-relaxed overflow-y-auto h-[calc(100%-4rem)]">
+        여기에 사주 결과가 표시됩니다.
+      </p>
+    </div>
+  </div>
+
   <script src="./js/main.js"></script>
-
 </body>
 </html>
