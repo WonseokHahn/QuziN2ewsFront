@@ -35,6 +35,7 @@
     <div class="flex flex-col p-4 space-y-3">
       <button id="menuQuizBtn" class="w-full text-left px-4 py-2 rounded bg-[#7ee8c1] text-[#2e2e2e] font-semibold hover:bg-[#5ccaa6]">틈새 지식 퀴즈</button>
       <button id="menuNewsBtn" class="w-full text-left px-4 py-2 rounded bg-[#7ee8c1] text-[#2e2e2e] font-semibold hover:bg-[#5ccaa6]">요약 뉴스 피드</button>
+      <button id="menuFortuneBtn" class="w-full text-left px-4 py-2 rounded bg-[#7ee8c1] text-[#2e2e2e] font-semibold hover:bg-[#5ccaa6]">오늘의 사주</button>
     </div>
   </div>
 
@@ -66,46 +67,82 @@
       <div id="newsSummary" class="mb-6"></div>
       <ul id="newsList" class="space-y-4"></ul>
     </section>
+
+    
+    <section id="fortune" class="fortune hidden">
+      <h2 class="text-xl font-semibold mb-4 text-[#7ee8c1]">오늘의 사주</h2>
+      <div class="flex flex-col gap-3 mb-4">
+
+        <!-- 이름 입력 -->
+        <input type="text" id="fortuneName" placeholder="이름" class="input-box w-full" />
+
+        <!-- 생년월일 -->
+        <input type="date" id="fortuneBirth" class="input-box w-full" placeholder="생년월일" />
+
+        <div class="flex gap-2">
+          <select id="birthHour" class="input-box w-1/2">
+            <option value="00">모름</option>
+            <option value="24">0시</option>
+            <option value="01">1시</option>
+            <option value="02">2시</option>
+            <option value="03">3시</option>
+            <option value="04">4시</option>
+            <option value="05">5시</option>
+            <option value="06">6시</option>
+            <option value="07">7시</option>
+            <option value="08">8시</option>
+            <option value="09">9시</option>
+            <option value="10">10시</option>
+            <option value="11">11시</option>
+            <option value="12">12시</option>
+            <option value="13">13시</option>
+            <option value="14">14시</option>
+            <option value="15">15시</option>
+            <option value="16">16시</option>
+            <option value="17">17시</option>
+            <option value="18">18시</option>
+            <option value="19">19시</option>
+            <option value="20">20시</option>
+            <option value="21">21시</option>
+            <option value="22">22시</option>
+            <option value="23">23시</option>
+          </select>
+        
+          <select id="birthMinute" class="input-box w-1/2">
+            <option value="00">모름</option>
+            <option value="00">00분</option>
+            <option value="15">15분</option>
+            <option value="30">30분</option>
+            <option value="45">45분</option>
+          </select>
+        </div>
+
+
+        <!-- 운세 항목 (다중 선택) -->
+        <div id="fortuneTypesBox" class="grid grid-cols-2 gap-2 bg-[#3a3a3a] p-4 rounded shadow-md">
+          <label><input type="checkbox" class="fortuneType" value="금전운" /> 금전운</label>
+          <label><input type="checkbox" class="fortuneType" value="취업운" /> 취업운</label>
+          <label><input type="checkbox" class="fortuneType" value="사업운" /> 사업운</label>
+          <label><input type="checkbox" class="fortuneType" value="연애운" /> 연애운</label>
+          <label><input type="checkbox" class="fortuneType" value="건강운" /> 건강운</label>
+          <label><input type="checkbox" class="fortuneType" value="기타" id="fortuneEtc" /> 기타</label>
+        </div>
+
+        <!-- 기타 입력 -->
+        <input type="text" id="fortuneCustom" placeholder="직접 입력할 운세 항목" class="input-box hidden w-full bg-[#3a3a3a] text-white" />
+
+        <!-- 버튼 -->
+        <button id="getFortuneBtn" class="btn-primary w-full">사주 분석</button>
+      </div>
+
+      <!-- 결과 -->
+      <div id="fortuneResult" class="mt-4"></div>
+    </section>
   </main>
+
 
   <!-- Main JS -->
   <script src="./js/main.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const mobileMenu = document.getElementById("mobileMenu");
 
-      // 햄버거 열기
-      document.getElementById("hamburgerBtn").addEventListener("click", () => {
-        mobileMenu.classList.toggle("translate-x-full");
-      });
-
-      // 햄버거 닫기
-      document.getElementById("menuCloseBtn").addEventListener("click", () => {
-        mobileMenu.classList.add("translate-x-full");
-      });
-
-      // 메뉴 항목 클릭 시
-      document.getElementById("menuQuizBtn").addEventListener("click", () => {
-        showSection('quiz');
-        mobileMenu.classList.add("translate-x-full");
-      });
-
-      document.getElementById("menuNewsBtn").addEventListener("click", () => {
-        showSection('news');
-        mobileMenu.classList.add("translate-x-full");
-      });
-
-      // 로고 클릭 시 홈으로
-      document.getElementById("logo").addEventListener("click", () => {
-        showSection('quiz');
-      });
-
-      // 버튼 연결
-      document.getElementById("generateQuizBtn").addEventListener("click", generateQuiz);
-      document.getElementById("generateBalanceBtn").addEventListener("click", generateBalanceGame);
-      document.getElementById("searchNewsBtn").addEventListener("click", searchNews);
-      document.getElementById("summarizeNewsBtn").addEventListener("click", summarizeNews);
-    });
-  </script>
 </body>
 </html>
