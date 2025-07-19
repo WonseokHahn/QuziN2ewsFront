@@ -7,17 +7,19 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="./css/style.css" />
 </head>
-<body class="bg-[#4b4b4b] text-[#d6d6d6] min-h-screen font-sans">
+<body class="min-h-screen font-sans dark">
   
-  <header class="bg-[#383838] text-[#d6d6d6] px-6 py-4 flex justify-between items-center shadow-md relative z-20">
-    <h1 id="logo" class="text-2xl font-extrabold cursor-pointer select-none hover:text-[#7ee8c1] transition">
+  <header class="px-6 py-4 flex justify-between items-center shadow-md relative z-20" style="background-color: var(--box-bg); color: var(--text-main);">
+    <h1 id="logo" class="text-2xl font-extrabold cursor-pointer select-none transition">
       심심풀이땅콩
     </h1>
-    <button id="hamburgerBtn" class="focus:outline-none">
-      <svg class="w-8 h-8 text-[#7ee8c1]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
-      </svg>
-    </button>
+    <div class="flex items-center gap-2">
+      <button id="hamburgerBtn" class="focus:outline-none">
+        <svg class="w-8 h-8 text-[#7ee8c1]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
   </header>
   
   <div id="mobileMenu" class="fixed top-0 right-0 h-full w-64 bg-[#3a3a3a] text-[#d6d6d6] shadow-lg transform translate-x-full transition-transform duration-300 z-40">
@@ -148,6 +150,6 @@
     </div>
   </div>
 
-  <script src="./js/main.js"></script>
+  <script type="module" src="./js/main.js"></script>
 </body>
 </html>

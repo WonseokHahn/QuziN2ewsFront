@@ -1,3 +1,36 @@
+/* 기본 상태에서는 CSS 변수 사용 */
+#logo {
+  color: var(--logo-color);
+}
+
+:root {
+  --bg-main: #4b4b4b;
+  --text-main: #d6d6d6;
+  --box-bg: #3a3a3a;
+  --btn-bg: #7ee8c1;
+  --btn-text: #2e2e2e;
+}
+
+.light {
+  --bg-main: #f9f9f9;
+  --text-main: #2e2e2e;
+  --box-bg: #ffffff;
+  --btn-bg: #2e2e2e;
+  --btn-text: #ffffff;
+}
+
+.dark {
+  --bg-main: #4b4b4b;
+  --text-main: #d6d6d6;
+  --box-bg: #3a3a3a;
+  --btn-bg: #7ee8c1;
+  --btn-text: #2e2e2e;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+}
 
 @keyframes shake {
   0% { transform: translateX(0); }
@@ -72,7 +105,6 @@ button {
 }
 .input-box:focus {
   outline: none;
-  ring: 2px solid #7ee8c1;
 }
 
 /* 배경 블러 처리 */
